@@ -1,0 +1,26 @@
+[workspace]
+authors = ["Tim Adler <tim.adler@bayer.com>"]
+channels = ["conda-forge"]
+name = "protenix"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[activation.env]
+CUDA_HOME = "${CONDA_PREFIX}"
+CPATH = "${CONDA_PREFIX}/targets/x86_64-linux/include:${CONDA_PREFIX}/include"
+
+[system-requirements]
+cuda = "12"
+
+[dependencies]
+python = ">=3.13,<3.14"
+ninja = "*"
+cuda-version = ">=12,<13"
+cuda-minimal-build = "*"
+
+[pypi-dependencies]
+protenix = { path = ".", editable = true }
+
+[tasks]
+check-cuda = 'echo "CUDA_HOME is: $CUDA_HOME"'
+
