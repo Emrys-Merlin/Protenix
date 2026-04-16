@@ -1,0 +1,60 @@
+[project]
+name = "protenix"
+description = "A trainable PyTorch reproduction of AlphaFold 3."
+channels = ["conda-forge", "bioconda"]
+platforms = ["linux-64"]
+
+[activation.env]
+CUDA_HOME = "${CONDA_PREFIX}"
+CPATH = "${CONDA_PREFIX}/targets/x86_64-linux/include:${CONDA_PREFIX}/include"
+
+[dependencies]
+python = ">=3.11"
+kalign2 = "*"
+hmmer = "*"
+pytorch = ">=2.7.1"
+torchvision = ">=0.22.1"
+torchaudio = ">=2.7.1"
+scipy = ">=1.9.0"
+ml-collections = ">=1.1.0"
+tqdm = ">=4.67.1"
+pandas = ">=2.3.1"
+pyyaml = ">=6.0.2"
+matplotlib = ">=3.10.5"
+ipywidgets = ">=8.1.7"
+py3dmol = ">=2.5.2"
+rdkit = ">=2025.9.3"
+biopython = ">=1.85"
+biotite = ">=1.4.0"
+modelcif = ">=1.4"
+gemmi = ">=0.6.7"
+pdbeccdutils = ">=1.0.0"
+fair-esm = ">=2.0.0"
+scikit-learn = ">=1.7.1"
+deepspeed = ">=0.17.5"
+pydantic = ">=2.0.0"
+triton = ">=3.3.1"
+optree = ">=0.17.0"
+protobuf = ">=6.31.1"
+icecream = ">=2.1.7"
+ipdb = ">=0.13.13"
+wandb = ">=0.21.1"
+numpy = ">=2.4.1"
+networkx = ">=3.4.2"
+
+[feature.cuda]
+platforms = ["linux-64"]
+system-requirements = { cuda = "12" }
+
+[feature.cuda.dependencies]
+ninja = "*"
+cuda-version = ">=12,<13"
+cuda-minimal-build = "*"
+
+[feature.cuda.pypi-dependencies]
+cuequivariance-ops-torch-cu12 = ">=0.8.0"
+cuequivariance-torch = ">=0.8.0"
+
+[environments]
+default = { solve-group = "default" }
+cuda = { features = ["cuda"], solve-group = "default" }

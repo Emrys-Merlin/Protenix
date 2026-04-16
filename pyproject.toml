@@ -1,0 +1,81 @@
+# Copyright 2024 ByteDance and/or its affiliates.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+[build-system]
+requires = ["setuptools>=68.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "protenix"
+dynamic = ["version"]
+description = "A trainable PyTorch reproduction of AlphaFold 3."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+authors = [
+    { name = "Bytedance Inc.", email = "ai4s-bio@bytedance.com" },
+]
+
+dependencies = [
+    "torch>=2.7.1",
+    "torchvision>=0.22.1",
+    "torchaudio>=2.7.1",
+    "scipy>=1.9.0",
+    "ml_collections>=1.1.0",
+    "tqdm>=4.67.1",
+    "pandas>=2.3.1",
+    "PyYAML>=6.0.2",
+    "matplotlib>=3.10.5",
+    "ipywidgets>=8.1.7",
+    "py3Dmol>=2.5.2",
+    "rdkit>=2025.9.3",
+    "biopython>=1.85",
+    "biotite>=1.4.0",
+    "modelcif>=1.4",
+    "gemmi>=0.6.7",
+    "pdbeccdutils>=1.0.0",
+    "fair-esm>=2.0.0",
+    "scikit-learn>=1.7.1",
+    "deepspeed>=0.17.5",
+    "pydantic>=2.0.0",
+    "triton>=3.3.1",
+    "optree>=0.17.0",
+    "protobuf>=6.31.1",
+    "icecream>=2.1.7",
+    "ipdb>=0.13.13",
+    "wandb>=0.21.1",
+    "numpy>=2.4.1",
+    "networkx>=3.4.2",
+]
+
+[project.optional-dependencies]
+cuda = [
+    "cuequivariance-ops-torch-cu12>=0.8.0",
+    "cuequivariance-torch>=0.8.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/bytedance/Protenix"
+
+[project.scripts]
+protenix = "runner.batch_inference:protenix_cli"
+
+[tool.setuptools.dynamic]
+version = {attr = "protenix.version.__version__"}
+
+[tool.setuptools.packages.find]
+exclude = ["assets", "benchmark", "*.egg-info"]
+
+[tool.setuptools.package-data]
+protenix = ["model/layer_norm/kernel/*"]
