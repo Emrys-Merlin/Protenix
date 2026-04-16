@@ -9,16 +9,20 @@ CUDA_HOME = "${CONDA_PREFIX}"
 CPATH = "${CONDA_PREFIX}/targets/x86_64-linux/include:${CONDA_PREFIX}/include"
 
 [environments]
-default = { features = ["cpu"], solve-group = "default" }
+default = { features = [
+  "cpu",
+  "protenix",
+], solve-group = "default" }
 cuda = { features = [
   "cuda",
   "deepspeed",
   "deepspeed-build",
   "cuequivariance",
+  "protenix",
 ], solve-group = "cuda" }
 
 [dependencies]
-python = ">=3.11"
+python = ">=3.11"  # due to cuequivariance
 kalign2 = "*"
 hmmer = "*"
 scipy = ">=1.9.0"
@@ -35,6 +39,7 @@ biotite = ">=1.4.0"
 modelcif = ">=1.4"
 gemmi = ">=0.6.7"
 pdbeccdutils = ">=1.0.0"
+# fair-esm = ">=2.0.0"  # Code path not necessary for inference, and also deprecated
 scikit-learn = ">=1.7.1"
 pydantic = ">=2.0.0"
 triton = ">=3.3.1"
@@ -50,10 +55,10 @@ networkx = ">=3.4.2"
 pytorch = ">=2.7.1"
 
 [feature.cuda]
-system-requirements = { cuda = "12" }
+system-requirements = { cuda = "13" }
 
 [feature.cuda.dependencies]
-cuda-version = ">=12,<13"
+cuda-version = ">=13,<14"
 pytorch-gpu = ">=2.7.1"
 
 [feature.deepspeed]
@@ -84,9 +89,15 @@ pytorch-gpu = ">=2.7.1"
   # Change torch extensions cache, used by deepspeed, to be isolated
   env.TORCH_EXTENSIONS_DIR = "$CONDA_PREFIX/caches/torch_extensions"
 
+[feature.cuequivariance.dependencies]
+python = "<3.14"
+
 [feature.cuequivariance.pypi-dependencies]
 cuequivariance = "<0.8"
 cuequivariance-torch = "<0.8"
 cuequivariance-ops-torch-cu12 = "<0.8"
 
+
+[feature.protenix.pypi-dependencies]
+protenix = { path = ".", editable = true }
 

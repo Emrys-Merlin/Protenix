@@ -28,44 +28,45 @@ authors = [
 ]
 
 dependencies = [
-    "torch>=2.7.1",
-    "torchvision>=0.22.1",
-    "torchaudio>=2.7.1",
-    "scipy>=1.9.0",
-    "ml_collections>=1.0.0", # v1.1.0 is not on conda-forge
-    "tqdm>=4.67.1",
-    "pandas>=2.3.1",
-    "PyYAML>=6.0.2",
-    "matplotlib>=3.10.5",
-    "ipywidgets>=8.1.7",
-    "py3Dmol>=2.5.2",
-    "rdkit>=2025.9.3",
-    "biopython>=1.85",
-    "biotite>=1.4.0",
-    "modelcif>=1.4",
-    "gemmi>=0.6.7",
-    "pdbeccdutils>=1.0.0",
-    "scikit-learn>=1.7.1",
-    "deepspeed>=0.17.5",
-    "pydantic>=2.0.0",
-    "triton>=3.3.1",
-    "optree>=0.17.0",
-    "protobuf>=6.31.1",
-    "icecream>=2.1.7",
-    "ipdb>=0.13.13",
-    "wandb>=0.21.1",
-    "numpy>=2.4.1",
-    "networkx>=3.4.2",
+    # "torch>=2.7.1",
+    # "torchvision>=0.22.1",
+    # "torchaudio>=2.7.1",
+    # "scipy>=1.9.0",
+    # "ml_collections>=1.0.0",  # v1.1.0 is not on conda-forge
+    # "tqdm>=4.67.1",
+    # "pandas>=2.3.1",
+    # "PyYAML>=6.0.2",
+    # "matplotlib>=3.10.5",
+    # "ipywidgets>=8.1.7",
+    # "py3Dmol>=2.5.2",
+    # "rdkit>=2025.9.3",
+    # "biopython>=1.85",
+    # "biotite>=1.4.0",
+    # "modelcif>=1.4",
+    # "gemmi>=0.6.7",
+    # "pdbeccdutils>=1.0.0",
+    # "fair-esm>=2.0.0",  # Codepath not necessary for inference
+    # "scikit-learn>=1.7.1",
+    # "deepspeed>=0.17.5",
+    # "pydantic>=2.0.0",
+    # "triton>=3.3.1",
+    # "optree>=0.17.0",
+    # "protobuf>=6.31.1",
+    # "icecream>=2.1.7",
+    # "ipdb>=0.13.13",
+    # "wandb>=0.21.1",
+    # "numpy>=2.4.1",
+    # "networkx>=3.4.2",
 ]
 
-[project.optional-dependencies]
-cuda = [
-    "cuequivariance-ops-torch-cu12>=0.8.0",
-    "cuequivariance-torch>=0.8.0",
-]
-esm = [
-    "fair-esm>=2.0.0",
-]
+# [project.optional-dependencies]
+# cuda = [
+#     "cuequivariance-ops-torch-cu12>=0.8.0",
+#     "cuequivariance-torch>=0.8.0",
+# ]
+# esm = [
+#     "fair-esm>=2.0.0",
+# ]
 
 [project.urls]
 Homepage = "https://github.com/bytedance/Protenix"
