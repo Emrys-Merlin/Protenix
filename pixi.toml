@@ -4,10 +4,6 @@ description = "A trainable PyTorch reproduction of AlphaFold 3."
 channels = ["conda-forge", "bioconda"]
 platforms = ["linux-64"]
 
-[activation.env]
-CUDA_HOME = "${CONDA_PREFIX}"
-CPATH = "${CONDA_PREFIX}/targets/x86_64-linux/include:${CONDA_PREFIX}/include"
-
 [environments]
 default = { features = [
   "cpu",
@@ -19,10 +15,10 @@ cuda = { features = [
   "deepspeed-build",
   "cuequivariance",
   "protenix",
-], solve-group = "cuda" }
+], solve-group = "default" }
 
 [dependencies]
-python = ">=3.11"  # due to cuequivariance
+python = ">=3.11"
 kalign2 = "*"
 hmmer = "*"
 scipy = ">=1.9.0"
@@ -89,14 +85,14 @@ pytorch-gpu = ">=2.7.1"
   # Change torch extensions cache, used by deepspeed, to be isolated
   env.TORCH_EXTENSIONS_DIR = "$CONDA_PREFIX/caches/torch_extensions"
 
-[feature.cuequivariance.dependencies]
-python = "<3.14"
-
 [feature.cuequivariance.pypi-dependencies]
-cuequivariance = "<0.8"
-cuequivariance-torch = "<0.8"
-cuequivariance-ops-torch-cu12 = "<0.8"
+cuequivariance = ">=0.8"
+cuequivariance-torch = ">=0.8"
+cuequivariance-ops-torch-cu13 = ">=0.8"
 
+[feature.cuequivariance.activation.env]
+CUDA_HOME = "${CONDA_PREFIX}"
+CPATH = "${CONDA_PREFIX}/targets/x86_64-linux/include:${CONDA_PREFIX}/include"
 
 [feature.protenix.pypi-dependencies]
 protenix = { path = ".", editable = true }
