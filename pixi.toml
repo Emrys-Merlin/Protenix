@@ -1,4 +1,4 @@
-[project]
+[workspace]
 name = "protenix"
 description = "A trainable PyTorch reproduction of AlphaFold 3."
 channels = ["conda-forge", "bioconda"]
@@ -8,15 +8,21 @@ platforms = ["linux-64"]
 CUDA_HOME = "${CONDA_PREFIX}"
 CPATH = "${CONDA_PREFIX}/targets/x86_64-linux/include:${CONDA_PREFIX}/include"
 
+[environments]
+default = { features = ["cpu"], solve-group = "default" }
+cuda = { features = [
+  "cuda",
+  "deepspeed",
+  "deepspeed-build",
+  "cuequivariance",
+], solve-group = "cuda" }
+
 [dependencies]
 python = ">=3.11"
 kalign2 = "*"
 hmmer = "*"
-pytorch = ">=2.7.1"
-torchvision = ">=0.22.1"
-torchaudio = ">=2.7.1"
 scipy = ">=1.9.0"
-ml-collections = ">=1.1.0"
+ml-collections = ">=1.0.0" # v1.1.0 is not on conda-forge
 tqdm = ">=4.67.1"
 pandas = ">=2.3.1"
 pyyaml = ">=6.0.2"
@@ -31,7 +37,6 @@ gemmi = ">=0.6.7"
 pdbeccdutils = ">=1.0.0"
 fair-esm = ">=2.0.0"
 scikit-learn = ">=1.7.1"
-deepspeed = ">=0.17.5"
 pydantic = ">=2.0.0"
 triton = ">=3.3.1"
 optree = ">=0.17.0"
@@ -42,19 +47,47 @@ wandb = ">=0.21.1"
 numpy = ">=2.4.1"
 networkx = ">=3.4.2"
 
+[feature.cpu.dependencies]
+pytorch = ">=2.7.1"
+
 [feature.cuda]
-platforms = ["linux-64"]
 system-requirements = { cuda = "12" }
 
 [feature.cuda.dependencies]
-ninja = "*"
 cuda-version = ">=12,<13"
-cuda-minimal-build = "*"
+pytorch-gpu = ">=2.7.1"
 
-[feature.cuda.pypi-dependencies]
-cuequivariance-ops-torch-cu12 = ">=0.8.0"
-cuequivariance-torch = ">=0.8.0"
+[feature.deepspeed]
 
-[environments]
-default = { solve-group = "default" }
-cuda = { features = ["cuda"], solve-group = "default" }
+  [feature.deepspeed.dependencies]
+  deepspeed = ">=0.18.7"
+
+  [feature.deepspeed-build.dependencies]
+  # These are only needed to build local extensions the first time
+  # Think on whether we want to delete them afterward and how it would play with the user
+  ninja = "*"
+  cutlass = "*"
+  cuda-minimal-build = "*"
+  libcusparse-dev = "*"
+  libcublas-dev = "*"
+  libcusolver-dev = "*"
+  libcurand-dev = "*"
+
+  [feature.deepspeed-build.activation]
+  # Trick deepspeed - we could also point to $CONDA_PREFIX
+  env.CUTLASS_PATH = "DS_IGNORE_CUTLASS_DETECTION"
+  # --- Isolating completely the environment, including built extensions
+  # Note that this might not play well with advanced users or people who do not want to recompile
+  # So we likely do not want to enforce it or document it well
+
+  # Change triton cache to be isolated
+  env.TRITON_CACHE_DIR = "$CONDA_PREFIX/caches/triton"
+  # Change torch extensions cache, used by deepspeed, to be isolated
+  env.TORCH_EXTENSIONS_DIR = "$CONDA_PREFIX/caches/torch_extensions"
+
+[feature.cuequivariance.pypi-dependencies]
+cuequivariance = "<0.8"
+cuequivariance-torch = "<0.8"
+cuequivariance-ops-torch-cu12 = "<0.8"
+
+
