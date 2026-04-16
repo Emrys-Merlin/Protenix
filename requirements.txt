@@ -17,7 +17,6 @@ biotite==1.4.0
 modelcif==1.4
 gemmi==0.6.7
 pdbeccdutils==1.0.0
-fair-esm==2.0.0
 scikit-learn==1.7.1
 scikit-learn-extra==0.3.0
 deepspeed==0.17.5
