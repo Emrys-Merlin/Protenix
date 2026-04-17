@@ -22,8 +22,8 @@ class TestMolGroupType(unittest.TestCase):
         )
 
     def _new_mol_group_type(self, df):
-        col1 = df["mol_1_type"].astype(str).values.astype(str)
-        col2 = df["mol_2_type"].astype(str).str.replace("nan", "intra", regex=False).values.astype(str)
+        col1 = np.array(df["mol_1_type"].fillna("nan").astype(str).values, dtype="U")
+        col2 = np.array(df["mol_2_type"].fillna("nan").astype(str).str.replace("nan", "intra", regex=False).values, dtype="U")
         lo = np.where(col1 <= col2, col1, col2)
         hi = np.where(col1 <= col2, col2, col1)
         return pd.Series(np.char.add(np.char.add(lo, "_"), hi), index=df.index)
@@ -192,15 +192,16 @@ class TestCalcWeightsSortedEntityId(unittest.TestCase):
         )
 
     def _new_sorted_entity(self, df):
-        e1 = df["entity_1_id"].astype(str).values.astype(str)
-        e2 = df["entity_2_id"].astype(str).values.astype(str)
+        e1 = np.array(df["entity_1_id"].fillna("nan").astype(str).values, dtype="U")
+        e2 = np.array(df["entity_2_id"].fillna("nan").astype(str).values, dtype="U")
         lo = np.where(e1 <= e2, e1, e2)
         hi = np.where(e1 <= e2, e2, e1)
-        return (
-            df["pdb_id"].astype(str) + "_"
-            + df["assembly_id"].astype(str) + "_"
-            + lo + "_" + hi
+        prefix = np.array(
+            (df["pdb_id"].astype(str) + "_" + df["assembly_id"].astype(str)).values,
+            dtype="U",
         )
+        result = np.char.add(np.char.add(np.char.add(np.char.add(prefix, "_"), lo), "_"), hi)
+        return pd.Series(result, index=df.index)
 
     def test_basic(self):
         df = pd.DataFrame({
