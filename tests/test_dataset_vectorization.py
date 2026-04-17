@@ -22,10 +22,10 @@ class TestMolGroupType(unittest.TestCase):
         )
 
     def _new_mol_group_type(self, df):
-        col1 = df["mol_1_type"].astype(str)
-        col2 = df["mol_2_type"].astype(str).str.replace("nan", "intra", regex=False)
-        lo = np.where(col1.values <= col2.values, col1.values, col2.values)
-        hi = np.where(col1.values <= col2.values, col2.values, col1.values)
+        col1 = df["mol_1_type"].astype(str).values.astype(str)
+        col2 = df["mol_2_type"].astype(str).str.replace("nan", "intra", regex=False).values.astype(str)
+        lo = np.where(col1 <= col2, col1, col2)
+        hi = np.where(col1 <= col2, col2, col1)
         return pd.Series(np.char.add(np.char.add(lo, "_"), hi), index=df.index)
 
     def test_basic(self):
@@ -192,8 +192,8 @@ class TestCalcWeightsSortedEntityId(unittest.TestCase):
         )
 
     def _new_sorted_entity(self, df):
-        e1 = df["entity_1_id"].astype(str).values
-        e2 = df["entity_2_id"].astype(str).values
+        e1 = df["entity_1_id"].astype(str).values.astype(str)
+        e2 = df["entity_2_id"].astype(str).values.astype(str)
         lo = np.where(e1 <= e2, e1, e2)
         hi = np.where(e1 <= e2, e2, e1)
         return (

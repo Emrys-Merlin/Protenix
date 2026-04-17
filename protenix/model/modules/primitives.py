@@ -256,6 +256,7 @@ def _attention(
     input_dtype = q.dtype
     q = q.to(dtype=torch.float32)
     k = k.to(dtype=torch.float32)
+    v = v.to(dtype=torch.float32)
     if attn_bias is not None:
         attn_bias = attn_bias.to(dtype=torch.float32)
 
@@ -267,7 +268,7 @@ def _attention(
             attn_mask=attn_bias,
             scale=1.0,
         )
-        return attn_output
+        return attn_output.to(dtype=input_dtype)
 
     with torch.amp.autocast("cuda", enabled=False):
         # [..., n_kv, d] -> [..., d, n_kv]
@@ -286,7 +287,7 @@ def _attention(
         attn_weights = F.softmax(attn_weights, dim=-1)
 
     # [..., n_q, n_kv], [..., n_kv, d] -> [..., n_q, d]
-    attn_output = attn_weights.to(dtype=input_dtype) @ v
+    attn_output = (attn_weights @ v).to(dtype=input_dtype)
 
     return attn_output
 
