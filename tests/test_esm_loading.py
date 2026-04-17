@@ -21,6 +21,9 @@ Related to GitHub issue #176 (ESM weights loading error with PyTorch 2.6+)
 
 import unittest
 
+pytest = __import__("pytest")
+esm = pytest.importorskip("esm", reason="fair-esm is not installed")
+
 
 class TestESMLoading(unittest.TestCase):
     """Test ESM model loading with different PyTorch versions"""

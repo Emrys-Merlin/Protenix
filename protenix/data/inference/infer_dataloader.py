@@ -24,7 +24,6 @@ import torch
 from biotite.structure import AtomArray
 from torch.utils.data import DataLoader, Dataset, DistributedSampler
 
-from protenix.data.esm.esm_featurizer import ESMFeaturizer
 from protenix.data.inference.json_to_feature import SampleDictToFeatures
 from protenix.data.msa.msa_featurizer import InferenceMSAFeaturizer
 from protenix.data.template.template_featurizer import InferenceTemplateFeaturizer
@@ -121,6 +120,8 @@ class InferenceDataset(Dataset):
         )
         self.esm_enable = esm_info.get("enable", False)
         if self.esm_enable:
+            from protenix.data.esm.esm_featurizer import ESMFeaturizer
+
             os.makedirs(configs.esm.embedding_dir, exist_ok=True)
             os.makedirs(os.path.dirname(configs.esm.sequence_fpath), exist_ok=True)
             ESMFeaturizer.precompute_esm_embedding(

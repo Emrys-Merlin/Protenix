@@ -281,10 +281,10 @@ class BaseSingleDataset(Dataset):
         """
         if self.name:
             logger.info("-" * 10 + f" Dataset {self.name}" + "-" * 10)
-        col1 = df["mol_1_type"].astype(str)
-        col2 = df["mol_2_type"].astype(str).str.replace("nan", "intra", regex=False)
-        lo = np.where(col1.values <= col2.values, col1.values, col2.values)
-        hi = np.where(col1.values <= col2.values, col2.values, col1.values)
+        col1 = np.array(df["mol_1_type"].fillna("nan").astype(str).values, dtype="U")
+        col2 = np.array(df["mol_2_type"].fillna("nan").astype(str).str.replace("nan", "intra", regex=False).values, dtype="U")
+        lo = np.where(col1 <= col2, col1, col2)
+        hi = np.where(col1 <= col2, col2, col1)
         df["mol_group_type"] = np.char.add(np.char.add(lo, "_"), hi)
 
         group_size_dict = dict(df["mol_group_type"].value_counts())
@@ -1082,8 +1082,8 @@ def calc_weights_for_df(
     if "assembly_id" in df.columns:
         s = s.str.cat(df["assembly_id"].astype(str), sep="_")
 
-    e1s = df["entity_1_id"].astype(str)
-    e2s = df["entity_2_id"].astype(str)
+    e1s = df["entity_1_id"].fillna("nan").astype(str)
+    e2s = df["entity_2_id"].fillna("nan").astype(str)
     emin = e1s.where(e1s <= e2s, e2s)
     emax = e2s.where(e1s <= e2s, e1s)
     df["pdb_sorted_entity_id"] = s.str.cat(emin, sep="_").str.cat(emax, sep="_")
